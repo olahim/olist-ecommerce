@@ -1,31 +1,58 @@
 # olist-ecommerce
 
-Olist Ecommerce Data Pipeline
-A production grade data engineering pipeline for ingesting, validating, transforming, storing and analysing the Olist Brazilian E-Commerce dataset. The platform processes 9 CSV datasets (38.19 MB in total), implements extensive data quality checks, creates a dimensional data warehouse via Apache Iceberg, and offers SQL analytics via Trino and visualization via Apache Superset. All the process is automated with Apache Airflow and executed in a CentOS environment with Hadoop, Spark, Hive, Trino, Prometheus, and Grafana.
+# Olist Ecommerce Data Pipeline
 
-Project Overview
-The pipeline implements an end-to-end modern data engineering architecture:
-The data is fed into the pipeline from Raw Data into HDFS and then moved to the Spark/Staging layer where it undergoes data quality checks before being loaded into the Iceberg Data Warehouse and finally into the Trino layer for use in the Superset web app.
-Apache Airflow manages the ingestion, transformation, data quality, warehouse load and monitoring processes.
+A **production-grade data engineering pipeline** for ingesting, validating, transforming, storing, and analyzing the **Olist Brazilian E-Commerce dataset**.
 
-Key Capabilities
-It is possible to ingest 9 Olist CSV datasets in a batch.
-Distributed processing using Apache Spark/PySpark
-Storage that uses HDFS.Data lake storage using HDFS.
-Parquet-based staging
-Automated data quality validation: Automatically check data quality against pre-defined rules.
-Data quality scoring and monitoring.
-Failed-record quarantine
-Star-schema data warehouse
-Slowly Changing Dimension (SCD) Type 2 dimensions
-This is an Apache Iceberg table storage.
-Hive metastore integration
-Use SQL to analyze data via Trino.
-Visualization and dashboard with Superset
-Monitor Pipeline with Prometheus and Grafana
-Airflow-based workflow orchestration
-Testing techniques: Unit and integration testing.
-The optimization of Iceberg tables and backup/restore of metastore.
+The platform processes **9 CSV datasets totaling 38.19 MB**, implements comprehensive data-quality checks, creates a dimensional data warehouse using **Apache Iceberg**, and provides SQL analytics through **Trino** with visualization through **Apache Superset**.
+
+The entire process is automated using **Apache Airflow** and executed in a **CentOS environment** with Hadoop, Spark, Hive, Trino, Prometheus, and Grafana.
+
+---
+
+## Project Overview
+
+The pipeline implements an **end-to-end modern data engineering architecture**.
+
+Data flows through the following stages:
+
+**Raw Data → HDFS → Spark/Staging → Data Quality Checks → Apache Iceberg Data Warehouse → Trino → Apache Superset**
+
+Apache Airflow manages the complete workflow, including:
+
+- Data ingestion
+- Data transformation
+- Data-quality validation
+- Data warehouse loading
+- Pipeline monitoring
+
+The architecture provides a complete workflow from **raw data ingestion to analytical visualization**.
+
+---
+
+## Key Capabilities
+
+- **Batch ingestion** of 9 Olist CSV datasets
+- **Distributed data processing** using Apache Spark/PySpark
+- **Data lake storage** using Hadoop HDFS
+- **Parquet-based staging** for intermediate data
+- **Automated data-quality validation** using predefined rules
+- **Data-quality scoring and monitoring**
+- **Failed-record quarantine** for invalid records
+- **Star-schema data warehouse** architecture
+- **Slowly Changing Dimension (SCD) Type 2** implementation
+- **Apache Iceberg** analytical table storage
+- **Hive Metastore integration**
+- **SQL analytics** using Trino
+- **Data visualization and dashboards** using Apache Superset
+- **Pipeline monitoring** using Prometheus and Grafana
+- **Airflow-based workflow orchestration**
+- **Unit and integration testing**
+- **Iceberg table optimization**
+- **Hive Metastore backup and restore**
+
+
+---
 
 
 ## Directory Structure
@@ -83,6 +110,10 @@ The project is organized into separate directories for **orchestration, data pro
 └── datasets/                    # Original Olist CSV datasets
 ```
 
+
+---
+
+
 ### Directory Description
 
 | Directory | Purpose |
@@ -100,6 +131,9 @@ The project is organized into separate directories for **orchestration, data pro
 | `scripts/` | Contains utility and automation scripts. |
 | `monitoring/` | Contains Prometheus and Grafana monitoring configuration. |
 | `datasets/` | Contains the original Olist CSV datasets. |
+
+
+---
 
 
 ## Architecture
@@ -132,6 +166,9 @@ flowchart TD
     G -.-> K
     H -.-> K
 ```
+
+---
+
 
 Dataset Inventory
 The pipeline works on 9 data sets, with some 126.19 MB of source data.
@@ -166,6 +203,9 @@ flowchart TD
     G --> H["Trino"]
     H --> I["Apache Superset"]
 ```
+
+
+---
 
 
 ## Data Warehouse Model
