@@ -439,6 +439,6 @@ This project is intended for **educational and internal use only**.
 
 ## Version
 
-**Current Version:** `1.0.0`
+**Current Version:** `2.0.0`
 
-**Last Updated:** `05-01-2026`
+**Last Updated:** `07-01-2026`
