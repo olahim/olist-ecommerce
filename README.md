@@ -27,6 +27,81 @@ Airflow-based workflow orchestration
 Testing techniques: Unit and integration testing.
 The optimization of Iceberg tables and backup/restore of metastore.
 
+
+## Directory Structure
+
+The project is organized into separate directories for **orchestration, data processing, storage, data quality, analytics, testing, documentation, and monitoring**.
+
+```text
+/home/hadoop-user/olist-ecommerce/
+│
+├── README.md                    # Project documentation
+├── Makefile                     # Common command wrapper
+├── .env.example                 # Environment variables template
+│
+├── airflow/                     # Apache Airflow DAGs and plugins
+│   ├── dags/                    # DAG definitions (11 DAGs)
+│   ├── plugins/                 # Custom operators and sensors
+│   └── logs/                    # Airflow execution logs
+│
+├── spark/                       # PySpark jobs and resources
+│   ├── jobs/                    # 25+ Spark jobs
+│   ├── lib/                     # JAR dependencies
+│   ├── scripts/                 # Spark submission scripts
+│   └── notebooks/               # Jupyter notebooks
+│
+├── hadoop/
+│   └── data/                    # HDFS data lake storage
+│       ├── raw/                 # Raw CSV files (partitioned)
+│       ├── staging/             # Staging data
+│       ├── quality/             # Data-quality reports and metrics
+│       └── warehouse/
+│           └── iceberg/         # Apache Iceberg tables
+│
+├── hive/
+│   └── scripts/                 # Hive DDL and migration scripts
+│
+├── postgresql/
+│   └── init/                    # PostgreSQL metastore initialization
+│
+├── iceberg/
+│   └── scripts/                 # Iceberg maintenance scripts
+│
+├── trino/
+│   └── queries/                 # Trino SQL queries
+│
+├── superset/                    # Apache Superset dashboards
+│
+├── tests/                       # Unit and integration tests
+│
+├── docs/                        # Project documentation
+│
+├── scripts/                     # Utility and automation scripts
+│
+├── monitoring/                  # Prometheus and Grafana configuration
+│
+└── datasets/                    # Original Olist CSV datasets
+```
+
+### Directory Description
+
+| Directory | Purpose |
+|---|---|
+| `airflow/` | Contains Airflow DAGs, custom plugins, and execution logs. |
+| `spark/` | Contains PySpark ETL jobs, dependencies, submission scripts, and notebooks. |
+| `hadoop/data/` | Contains the data lake layers, including raw, staging, quality, and Iceberg warehouse data. |
+| `hive/` | Contains Hive DDL and migration scripts. |
+| `postgresql/` | Contains PostgreSQL initialization files for the Hive metastore. |
+| `iceberg/` | Contains Apache Iceberg maintenance scripts. |
+| `trino/` | Contains SQL queries used for analytical processing. |
+| `superset/` | Contains Apache Superset dashboard resources. |
+| `tests/` | Contains unit and integration tests. |
+| `docs/` | Contains project documentation and runbooks. |
+| `scripts/` | Contains utility and automation scripts. |
+| `monitoring/` | Contains Prometheus and Grafana monitoring configuration. |
+| `datasets/` | Contains the original Olist CSV datasets. |
+
+
 ## Architecture
 
 ```mermaid
