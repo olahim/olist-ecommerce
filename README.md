@@ -27,7 +27,7 @@ Airflow-based workflow orchestration
 Testing techniques: Unit and integration testing.
 The optimization of Iceberg tables and backup/restore of metastore.
 
-                       ## Architecture
+## Architecture
 
 ```mermaid
 flowchart TD
@@ -72,37 +72,26 @@ The pipeline works on 9 data sets, with some 126.19 MB of source data.
 9. Category Translation   product_category_name_translation.csv         Translation of product categories from Portuguese to English.
 
 
-Data Flow
+## Data Flow
+
 This is the flow of the complete data pipeline:
-CSV Files
-    │
-    ▼
-HDFS Raw Layer
-    │
-    ▼
-Spark / PySpark Ingestion
-    │
-    ▼
-Staging Layer (Parquet)
-    │
-    ▼
-Data Quality Checks
-    │
-    ├── Valid Records ───────────────┐
-    │                                │
-    └── Failed Records → Quarantine  │
-                                     ▼
-                              Dimension Tables
-                              + Fact Tables
-                                     │
-                                     ▼
-                              Apache Iceberg
-                                     │
-                                     ▼
-                                  Trino
-                                     │
-                                     ▼
-                                Superset
+
+```mermaid
+flowchart TD
+
+    A["CSV Files"] --> B["HDFS<br/>Raw Layer"]
+    B --> C["Spark / PySpark<br/>Ingestion"]
+    C --> D["Staging Layer<br/>Parquet"]
+    D --> E["Data Quality<br/>Checks"]
+
+    E -->|Valid Records| F["Dimension Tables<br/>+ Fact Tables"]
+    E -->|Failed Records| Q["Quarantine"]
+
+    F --> G["Apache Iceberg"]
+    G --> H["Trino"]
+    H --> I["Apache Superset"]
+```
+
 
 Data Warehouse Model
 The warehouse is designed in a dimensional/star-schema with Apache Iceberg.
