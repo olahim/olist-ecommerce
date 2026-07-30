@@ -93,92 +93,73 @@ flowchart TD
 ```
 
 
-Data Warehouse Model
-The warehouse is designed in a dimensional/star-schema with Apache Iceberg.
-Dimension Tables
-dim_customers_iceberg : Customer dimension that has customer information and historical tracking through SCD Type 2.
-dim_products_iceberg : Product Dimension that includes Product attributes and translated Product categories.
-dim_sellers_iceberg : A seller dimension with seller data and a series of metrics related to their performance.
+## Data Warehouse Model
 
-Fact Tables
-fact_orders_iceberg
-Order-level transactional facts.
-Partitioned by date
-Includes analytical data that is relevant to the order
-fact_order_items_iceberg
-Line-item-level transactional facts.
-fact_order_payments_iceberg
-Facts pertaining to payment transactions with payment-related information.
+The warehouse is designed using a **dimensional/star-schema architecture** with **Apache Iceberg**.
 
-Data Quality Framework
-The pipeline uses automated data-quality validation prior to loading data into the warehouse.
-Capability
-Description
-Null Checks
-Identifies missing data in mandatory fields
-Duplicate Detection
-Identifies duplicate records
-Referential Integrity
-Validates foreign key relations among data sets
-Category Mapping
-Verifies that product categories are translated into valid categories
-Range Validation
-Checks the validity of numeric ranges, prices, quantity and dates
-Outlier Detection
-Detects numeric outliers in tables
-Format Validation
-Validates ID and zip-code patterns
-DQ Scoring
-Computes individual table daily quality scores
-Failed Record Quarantine
-Does not store invalid records for review
-DQ Alerting
-Notifies about data quality issues when thresholds are exceeded
+### Dimension Tables
 
+| Table | Description |
+|---|---|
+| `dim_customers_iceberg` | Customer dimension containing customer information and historical tracking using **SCD Type 2**. |
+| `dim_products_iceberg` | Product dimension containing product attributes and translated product categories. |
+| `dim_sellers_iceberg` | Seller dimension containing seller data and performance-related metrics. |
 
-Data Quality Metrics
+### Fact Tables
+
+| Table | Description |
+|---|---|
+| `fact_orders_iceberg` | Order-level transactional facts. Partitioned by date and contains analytical data relevant to orders. |
+| `fact_order_items_iceberg` | Line-item-level transactional facts. |
+| `fact_order_payments_iceberg` | Payment transaction facts containing payment-related information. |
+
+---
+
+## Data Quality Framework
+
+The pipeline uses **automated data-quality validation** before loading data into the warehouse.
+
+| Capability | Description |
+|---|---|
+| **Null Checks** | Identifies missing data in mandatory fields. |
+| **Duplicate Detection** | Identifies duplicate records. |
+| **Referential Integrity** | Validates foreign-key relationships among datasets. |
+| **Category Mapping** | Verifies that product categories are mapped to valid translated categories. |
+| **Range Validation** | Checks numeric ranges, prices, quantities, and dates. |
+| **Outlier Detection** | Detects numeric outliers in tables. |
+| **Format Validation** | Validates ID and ZIP-code patterns. |
+| **DQ Scoring** | Computes daily data-quality scores for individual tables. |
+| **Failed Record Quarantine** | Stores invalid records separately for review. |
+| **DQ Alerting** | Notifies the team when data-quality thresholds are exceeded. |
+
+---
+
+## Data Quality Metrics
+
 The following monitoring targets are associated with the pipeline:
-Metric
-Target
-Alert Threshold
-DQ Score
-≥ 95%
-< 90% Warning / < 80% Critical
-Pipeline Duration
-< 100 minutes
-> 120 minutes
-Data Freshness
-< 24 hours
-> 30 hours
-Failed Records
-0
-> 1,000
 
+| Metric | Target | Alert Threshold |
+|---|---:|---|
+| **DQ Score** | ≥ 95% | < 90% Warning / < 80% Critical |
+| **Pipeline Duration** | < 100 minutes | > 120 minutes |
+| **Data Freshness** | < 24 hours | > 30 hours |
+| **Failed Records** | 0 | > 1,000 |
 
-Technology Stack
-Technology
-Purpose
-Apache Airflow
-Workflow orchestration
-Apache Spark / PySpark
-Distributed data ingestion and transformation,
-Hadoop HDFS
-Data lake/raw data storage
-Apache Iceberg
-The analytical table/data warehouse storage.The analytical table/data warehouse storage.
-Apache Hive
-Metastore
-PostgreSQL
-Hive metastore database
-Trino
-A server application that performs SQL queries and analyzes the data.
-Apache Superset
-Present and interpret data using visualisation and dashboards
-Prometheus
-Metrics collection
-Grafana
-Monitoring and Metrics visualization
-Python
-Data engineering and pipeline development
-SQL
-Analytics and warehouse queries
+---
+
+## Technology Stack
+
+| Technology | Purpose |
+|---|---|
+| **Apache Airflow** | Workflow orchestration. |
+| **Apache Spark / PySpark** | Distributed data ingestion and transformation. |
+| **Hadoop HDFS** | Data lake and raw data storage. |
+| **Apache Iceberg** | Analytical table and data warehouse storage. |
+| **Apache Hive Metastore** | Metadata management for the data warehouse. |
+| **PostgreSQL** | Database used for the Hive metastore. |
+| **Trino** | SQL query engine for analytical data processing and analysis. |
+| **Apache Superset** | Data visualization and dashboarding. |
+| **Prometheus** | Metrics collection. |
+| **Grafana** | Monitoring and metrics visualization. |
+| **Python** | Data engineering and pipeline development. |
+| **SQL** | Analytics and data warehouse queries. |
