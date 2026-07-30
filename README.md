@@ -28,65 +28,35 @@ Testing techniques: Unit and integration testing.
 The optimization of Iceberg tables and backup/restore of metastore.
 
 Architecture
-                         ┌─────────────────┐
-                         │   Olist CSV     │
-                         │     Files       │
-                         └────────┬────────┘
-                                  │
-                                  ▼
-                         ┌─────────────────┐
-                         │      HDFS       │
-                         │   Raw Storage   │
-                         └────────┬────────┘
-                                  │
-                                  ▼
-                         ┌─────────────────┐
-                         │     Spark       │
-                         │  Ingestion &    │
-                         │ Transformations │
-                         └────────┬────────┘
-                                  │
-                                  ▼
-                         ┌─────────────────┐
-                         │ Data Quality    │
-                         │    Checks       │
-                         └────────┬────────┘
-                                  │
-                    ┌─────────────┴─────────────┐
-                    ▼                           ▼
-             ┌──────────────┐           ┌──────────────┐
-             │ Dimensions   │           │ Fact Tables  │
-             │   SCD Type 2 │           │              │
-             └──────┬───────┘           └──────┬───────┘
-                    │                           │
-                    └─────────────┬─────────────┘
-                                  ▼
-                         ┌─────────────────┐
-                         │ Apache Iceberg  │
-                         │ Data Warehouse  │
-                         └────────┬────────┘
-                                  │
-                                  ▼
-                         ┌─────────────────┐
-                         │     Trino       │
-                         │ SQL Analytics   │
-                         └────────┬────────┘
-                                  │
-                                  ▼
-                         ┌─────────────────┐
-                         │    Superset     │
-                         │   Dashboards    │
-                         └─────────────────┘
+                        ## Architecture
 
-             ┌────────────────────────────────────┐
-             │         Apache Airflow             │
-             │        Pipeline Orchestration      │
-             └────────────────────────────────────┘
+```mermaid
+flowchart TD
+    A["Olist CSV Files"] --> B["HDFS<br/>Raw Storage"]
+    B --> C["Apache Spark<br/>Ingestion & Transformations"]
+    C --> D["Data Quality<br/>Checks"]
 
-             ┌────────────────────────────────────┐
-             │      Prometheus + Grafana           │
-             │       Monitoring & Metrics          │
-             └────────────────────────────────────┘
+    D --> E["Dimensions<br/>SCD Type 2"]
+    D --> F["Fact Tables"]
+
+    E --> G["Apache Iceberg<br/>Data Warehouse"]
+    F --> G
+
+    G --> H["Trino<br/>SQL Analytics"]
+    H --> I["Apache Superset<br/>Dashboards"]
+
+    J["Apache Airflow<br/>Pipeline Orchestration"] -.-> A
+    J -.-> B
+    J -.-> C
+    J -.-> D
+    J -.-> G
+    J -.-> H
+
+    K["Prometheus<br/>Metrics Collection"] --> L["Grafana<br/>Monitoring"]
+    C -.-> K
+    D -.-> K
+    G -.-> K
+    H -.-> K
 
 Dataset Inventory
 The pipeline works on 9 data sets, with some 126.19 MB of source data.
