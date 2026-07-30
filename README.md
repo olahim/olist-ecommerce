@@ -27,8 +27,7 @@ Airflow-based workflow orchestration
 Testing techniques: Unit and integration testing.
 The optimization of Iceberg tables and backup/restore of metastore.
 
-Architecture
-                        ## Architecture
+                       ## Architecture
 
 ```mermaid
 flowchart TD
@@ -57,6 +56,7 @@ flowchart TD
     D -.-> K
     G -.-> K
     H -.-> K
+```
 
 Dataset Inventory
 The pipeline works on 9 data sets, with some 126.19 MB of source data.
