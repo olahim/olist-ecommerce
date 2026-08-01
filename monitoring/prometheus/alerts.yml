@@ -1,0 +1,63 @@
+groups:
+  - name: data_quality_alerts
+    interval: 30s
+    rules:
+      - alert: LowDQScore
+        expr: dq_score_current < 90
+        for: 5m
+        labels:
+          severity: warning
+          component: data_quality
+        annotations:
+          summary: "Data quality score below 90%"
+          description: "Dataset {{ $labels.dataset }} has DQ score {{ $labels.value }}%"
+          
+      - alert: CriticalDQScore
+        expr: dq_score_current < 80
+        for: 1m
+        labels:
+          severity: critical
+          component: data_quality
+        annotations:
+          summary: "Critical data quality issue"
+          description: "Dataset {{ $labels.dataset }} has critical DQ score {{ $labels.value }}%"
+          
+      - alert: PipelineFailure
+        expr: airflow_dag_status{status="failed"} == 1
+        for: 0m
+        labels:
+          severity: critical
+          component: pipeline
+        annotations:
+          summary: "Airflow DAG failed"
+          description: "DAG {{ $labels.dag }} failed at {{ $labels.execution_date }}"
+          
+      - alert: HighFailedRecords
+        expr: failed_records_count > 1000
+        for: 10m
+        labels:
+          severity: warning
+          component: data_quality
+        annotations:
+          summary: "High number of failed records"
+          description: "Dataset {{ $labels.dataset }} has {{ $labels.value }} failed records"
+          
+      - alert: LongRunningQuery
+        expr: trino_query_duration_seconds > 1800
+        for: 5m
+        labels:
+          severity: warning
+          component: performance
+        annotations:
+          summary: "Query running for over 30 minutes"
+          description: "Query ID {{ $labels.query_id }} has been running for {{ $labels.value }} seconds"
+          
+      - alert: DataStaleness
+        expr: (time() - latest_data_timestamp) > 86400
+        for: 1h
+        labels:
+          severity: critical
+          component: pipeline
+        annotations:
+          summary: "Data staleness detected"
+          description: "Latest data ingestion was {{ $labels.hours_ago }} hours ago"

@@ -1,0 +1,27 @@
+{
+  "slice_name": "Revenue Trend",
+  "datasource_type": "table",
+  "datasource_id": 1,
+  "viz_type": "line",
+  "params": {
+    "metrics": ["SUM(total_value)"],
+    "groupby": ["DATE_TRUNC('month', order_purchase_date)"],
+    "adhoc_filters": [
+      {
+        "expressionType": "SIMPLE",
+        "subject": "order_status",
+        "operator": "==",
+        "comparator": "delivered",
+        "clause": "WHERE"
+      }
+    ],
+    "row_limit": 100,
+    "x_axis": "order_purchase_date",
+    "color_scheme": "supersetColors",
+    "show_legend": true,
+    "x_axis_label": "Date",
+    "y_axis_label": "Revenue (BRL)",
+    "show_markers": true,
+    "line_interpolation": "linear"
+  }
+}

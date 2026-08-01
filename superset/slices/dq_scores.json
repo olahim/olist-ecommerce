@@ -1,0 +1,27 @@
+{
+  "slice_name": "DQ Scores by Dataset",
+  "datasource_type": "table",
+  "datasource_id": 2,
+  "viz_type": "bar",
+  "params": {
+    "metrics": ["MAX(dq_score)"],
+    "groupby": ["dataset_name"],
+    "adhoc_filters": [
+      {
+        "expressionType": "SIMPLE",
+        "subject": "dq_date",
+        "operator": "==",
+        "comparator": "CURRENT_DATE",
+        "clause": "WHERE"
+      }
+    ],
+    "row_limit": 50,
+    "x_axis": "dataset_name",
+    "color_scheme": "supersetColors",
+    "show_legend": true,
+    "x_axis_label": "Dataset",
+    "y_axis_label": "DQ Score (%)",
+    "y_axis_bounds": [0, 100],
+    "show_bar_value": true
+  }
+}

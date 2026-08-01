@@ -1,0 +1,8 @@
+{
+  "dashboard_title": "Data Quality Monitoring",
+  "slug": "data-quality-dashboard",
+  "position_json": "{\"CHART-1\":{\"children\":[],\"id\":\"CHART-1\",\"meta\":{\"chartId\":11,\"height\":50,\"sliceName\":\"DQ Scores by Dataset\",\"uuid\":\"dq001\",\"width\":12},\"parents\":[\"ROOT_ID\",\"GRID_ID\",\"ROW-1\"],\"type\":\"CHART\"},\"CHART-2\":{\"children\":[],\"id\":\"CHART-2\",\"meta\":{\"chartId\":12,\"height\":50,\"sliceName\":\"DQ Trend Over Time\",\"uuid\":\"dq002\",\"width\":6},\"parents\":[\"ROOT_ID\",\"GRID_ID\",\"ROW-2\"],\"type\":\"CHART\"},\"CHART-3\":{\"children\":[],\"id\":\"CHART-3\",\"meta\":{\"chartId\":13,\"height\":50,\"sliceName\":\"Failed Checks by Type\",\"uuid\":\"dq003\",\"width\":6},\"parents\":[\"ROOT_ID\",\"GRID_ID\",\"ROW-2\"],\"type\":\"CHART\"},\"CHART-4\":{\"children\":[],\"id\":\"CHART-4\",\"meta\":{\"chartId\":14,\"height\":50,\"sliceName\":\"SLA Compliance\",\"uuid\":\"dq004\",\"width\":6},\"parents\":[\"ROOT_ID\",\"GRID_ID\",\"ROW-3\"],\"type\":\"CHART\"},\"CHART-5\":{\"children\":[],\"id\":\"CHART-5\",\"meta\":{\"chartId\":15,\"height\":50,\"sliceName\":\"Alert History\",\"uuid\":\"dq005\",\"width\":6},\"parents\":[\"ROOT_ID\",\"GRID_ID\",\"ROW-3\"],\"type\":\"CHART\"}}",
+  "published": true,
+  "css": "",
+  "json_metadata": "{\"timed_refresh_immune_slices\":[11,12,13,14,15],\"expanded_slices\":{},\"filter_scopes\":{},\"color_scheme\":\"supersetColors\",\"refresh_frequency\":3600}"
+}

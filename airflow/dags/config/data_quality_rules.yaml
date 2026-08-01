@@ -1,0 +1,236 @@
+# Data Quality Rules for Olist Datasets
+
+global:
+  sla_threshold: 95
+  quarantine_enabled: true
+  alert_on_failure: true
+  webhook_url: "https://hooks.slack.com/services/your-webhook-url"
+
+datasets:
+  customers:
+    dq_score_weight: 1.0
+    null_checks:
+      - column: customer_id
+        severity: ERROR
+        description: "Customer ID is required for all records"
+      - column: customer_unique_id
+        severity: ERROR
+      - column: customer_zip_code_prefix
+        severity: WARNING
+      - column: customer_city
+        severity: WARNING
+      - column: customer_state
+        severity: WARNING
+        
+    duplicate_checks:
+      - columns: [customer_id]
+        severity: ERROR
+      - columns: [customer_unique_id]
+        severity: WARNING
+        
+    format_checks:
+      - column: customer_id
+        pattern: '^[a-f0-9]{32}$'
+      - column: customer_unique_id
+        pattern: '^[a-f0-9]{32}$'
+      - column: customer_zip_code_prefix
+        pattern: '^[0-9]{5}$'
+      - column: customer_state
+        pattern: '^[A-Z]{2}$'
+        
+  orders:
+    dq_score_weight: 1.2
+    null_checks:
+      - column: order_id
+        severity: ERROR
+      - column: customer_id
+        severity: ERROR
+      - column: order_status
+        severity: WARNING
+        
+    duplicate_checks:
+      - columns: [order_id]
+        severity: ERROR
+        
+    referential_integrity:
+      - foreign_key: customer_id
+        references: customers.customer_id
+        severity: ERROR
+        
+    range_checks:
+      - column: order_purchase_timestamp
+        min: '2016-01-01'
+        max: '2018-12-31'
+        severity: ERROR
+      - column: order_approved_timestamp
+        min: '2016-01-01'
+        max: '2018-12-31'
+        severity: WARNING
+        
+    format_checks:
+      - column: order_id
+        pattern: '^[a-f0-9]{32}$'
+        
+  products:
+    dq_score_weight: 0.8
+    null_checks:
+      - column: product_id
+        severity: ERROR
+        
+    duplicate_checks:
+      - columns: [product_id]
+        severity: ERROR
+        
+    referential_integrity:
+      - foreign_key: product_category_name
+        references: category_translation.product_category_name
+        severity: WARNING
+        
+    range_checks:
+      - column: product_weight_g
+        min: 0
+        max: 50000
+        severity: WARNING
+      - column: product_length_cm
+        min: 0
+        max: 500
+        severity: WARNING
+      - column: product_height_cm
+        min: 0
+        max: 500
+        severity: WARNING
+      - column: product_width_cm
+        min: 0
+        max: 500
+        severity: WARNING
+        
+  sellers:
+    dq_score_weight: 0.8
+    null_checks:
+      - column: seller_id
+        severity: ERROR
+      - column: seller_zip_code_prefix
+        severity: WARNING
+        
+    duplicate_checks:
+      - columns: [seller_id]
+        severity: ERROR
+        
+    format_checks:
+      - column: seller_id
+        pattern: '^[a-f0-9]{32}$'
+      - column: seller_zip_code_prefix
+        pattern: '^[0-9]{5}$'
+      - column: seller_state
+        pattern: '^[A-Z]{2}$'
+        
+  order_items:
+    dq_score_weight: 1.0
+    null_checks:
+      - column: order_id
+        severity: ERROR
+      - column: product_id
+        severity: ERROR
+      - column: seller_id
+        severity: ERROR
+      - column: price
+        severity: ERROR
+        
+    referential_integrity:
+      - foreign_key: order_id
+        references: orders.order_id
+        severity: ERROR
+      - foreign_key: product_id
+        references: products.product_id
+        severity: ERROR
+      - foreign_key: seller_id
+        references: sellers.seller_id
+        severity: ERROR
+        
+    range_checks:
+      - column: price
+        min: 0
+        max: 10000
+        severity: ERROR
+      - column: freight_value
+        min: 0
+        max: 1000
+        severity: WARNING
+      - column: quantity
+        min: 1
+        max: 100
+        severity: WARNING
+        
+  reviews:
+    dq_score_weight: 0.6
+    null_checks:
+      - column: review_id
+        severity: ERROR
+      - column: order_id
+        severity: ERROR
+        
+    duplicate_checks:
+      - columns: [review_id]
+        severity: ERROR
+        
+    range_checks:
+      - column: review_score
+        min: 1
+        max: 5
+        severity: ERROR
+        
+    outlier_detection:
+      - column: review_score
+        method: IQR
+        multiplier: 1.5
+        severity: WARNING
+        
+  payments:
+    dq_score_weight: 0.7
+    null_checks:
+      - column: order_id
+        severity: ERROR
+      - column: payment_type
+        severity: WARNING
+        
+    range_checks:
+      - column: payment_value
+        min: 0
+        max: 100000
+        severity: ERROR
+      - column: payment_installments
+        min: 0
+        max: 24
+        severity: WARNING
+        
+  geolocation:
+    dq_score_weight: 0.5
+    null_checks:
+      - column: geolocation_zip_code_prefix
+        severity: WARNING
+        
+    format_checks:
+      - column: geolocation_zip_code_prefix
+        pattern: '^[0-9]{5}$'
+        
+    range_checks:
+      - column: geolocation_lat
+        min: -33.0
+        max: 5.0
+        severity: WARNING
+      - column: geolocation_lng
+        min: -74.0
+        max: -34.0
+        severity: WARNING
+        
+  category_translation:
+    dq_score_weight: 0.3
+    null_checks:
+      - column: product_category_name
+        severity: ERROR
+      - column: product_category_name_english
+        severity: WARNING
+        
+    duplicate_checks:
+      - columns: [product_category_name]
+        severity: ERROR

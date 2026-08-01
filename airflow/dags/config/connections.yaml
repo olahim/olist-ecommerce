@@ -1,0 +1,60 @@
+# Airflow Connection Definitions
+
+connections:
+  - conn_id: spark_default
+    conn_type: spark
+    host: localhost
+    port: 7077
+    extra: |
+      {
+        "spark-home": "/opt/spark",
+        "deploy-mode": "client"
+      }
+      
+  - conn_id: hive_default
+    conn_type: hive
+    host: localhost
+    port: 10000
+    schema: default
+    login: hive
+    password: ""
+    
+  - conn_id: trino_default
+    conn_type: trino
+    host: localhost
+    port: 8080
+    schema: olist_warehouse
+    extra: |
+      {
+        "catalog": "iceberg"
+      }
+      
+  - conn_id: postgres_metastore
+    conn_type: postgres
+    host: localhost
+    port: 5432
+    schema: metastore
+    login: hive
+    password: hive_password
+    extra: |
+      {
+        "sslmode": "disable"
+      }
+      
+  - conn_id: hdfs_default
+    conn_type: hdfs
+    host: localhost
+    port: 8020
+    extra: |
+      {
+        "user": "hadoop-user"
+      }
+      
+  - conn_id: s3_default
+    conn_type: s3
+    extra: |
+      {
+        "aws_access_key_id": "your_access_key",
+        "aws_secret_access_key": "your_secret_key",
+        "region_name": "us-east-1"
+      }

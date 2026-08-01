@@ -1,0 +1,20 @@
+{
+  "slice_name": "DQ Trend Over Time",
+  "datasource_type": "table",
+  "datasource_id": 2,
+  "viz_type": "line",
+  "params": {
+    "metrics": ["AVG(dq_score)"],
+    "groupby": ["dataset_name", "dq_date"],
+    "adhoc_filters": [],
+    "row_limit": 500,
+    "x_axis": "dq_date",
+    "x_axis_label": "Date",
+    "y_axis_label": "Average DQ Score (%)",
+    "color_scheme": "supersetColors",
+    "show_legend": true,
+    "line_interpolation": "linear",
+    "show_markers": true,
+    "y_axis_bounds": [0, 100]
+  }
+}

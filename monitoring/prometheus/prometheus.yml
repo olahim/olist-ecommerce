@@ -1,0 +1,39 @@
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+  external_labels:
+    environment: olist_production
+
+alerting:
+  alertmanagers:
+    - static_configs:
+        - targets: ['localhost:9093']
+
+rule_files:
+  - "alerts.yml"
+
+scrape_configs:
+  - job_name: 'airflow'
+    static_configs:
+      - targets: ['localhost:9100']
+    metrics_path: '/metrics'
+
+  - job_name: 'spark'
+    static_configs:
+      - targets: ['localhost:9101']
+    metrics_path: '/metrics'
+
+  - job_name: 'trino'
+    static_configs:
+      - targets: ['localhost:9102']
+    metrics_path: '/metrics'
+
+  - job_name: 'dq_metrics'
+    static_configs:
+      - targets: ['localhost:9103']
+    metrics_path: '/metrics'
+
+  - job_name: 'node'
+    static_configs:
+      - targets: ['localhost:9104']
+    metrics_path: '/metrics'

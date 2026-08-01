@@ -1,0 +1,95 @@
+# Olist Ecommerce DAG Configuration
+
+dag:
+  name: olist_etl_pipeline
+  description: End-to-end ETL pipeline for Olist Ecommerce data
+  schedule_interval: "0 2 * * *"
+  catchup: false
+  max_active_runs: 1
+  
+default_args:
+  owner: data_engineer
+  depends_on_past: false
+  start_date: "2024-01-01"
+  email_on_failure: true
+  email_on_retry: false
+  email: ["data-team@olist.com", "alerts@olist.com"]
+  retries: 3
+  retry_delay_seconds: 300
+  execution_timeout_hours: 4
+  
+spark:
+  master: yarn
+  deploy_mode: cluster
+  executor_memory: 4g
+  executor_cores: 2
+  num_executors: 4
+  driver_memory: 2g
+  driver_cores: 1
+  
+iceberg:
+  catalog_name: glue
+  warehouse_path: /opt/hadoop/data/warehouse/iceberg
+  file_format: parquet
+  compression_codec: snappy
+  
+datasets:
+  - name: customers
+    file: olist_customers_dataset.csv
+    primary_key: customer_id
+    partition_columns: [year, month, day]
+    
+  - name: orders
+    file: olist_orders_dataset.csv
+    primary_key: order_id
+    foreign_keys:
+      - customer_id: customers.customer_id
+    partition_columns: [year, month, day]
+    
+  - name: products
+    file: olist_products_dataset.csv
+    primary_key: product_id
+    partition_columns: [year, month, day]
+    
+  - name: sellers
+    file: olist_sellers_dataset.csv
+    primary_key: seller_id
+    partition_columns: [year, month, day]
+    
+  - name: geolocation
+    file: olist_geolocation_dataset.csv
+    partition_columns: [year, month, day]
+    
+  - name: reviews
+    file: olist_order_reviews_dataset.csv
+    partition_columns: [year, month, day]
+    
+  - name: payments
+    file: olist_order_payments_dataset.csv
+    partition_columns: [year, month, day]
+    
+  - name: order_items
+    file: olist_order_items_dataset.csv
+    foreign_keys:
+      - order_id: orders.order_id
+      - product_id: products.product_id
+      - seller_id: sellers.seller_id
+    partition_columns: [year, month, day]
+    
+  - name: category_translation
+    file: product_category_name_translation.csv
+    partition_columns: [year, month, day]
+
+storage:
+  raw_path: /opt/hadoop/data/raw
+  staging_path: /opt/hadoop/data/staging
+  warehouse_path: /opt/hadoop/data/warehouse
+  quality_path: /opt/hadoop/data/quality
+  failed_records_path: /opt/hadoop/data/quality/failed_records
+  dq_reports_path: /opt/hadoop/data/quality/dq_reports
+  dq_metrics_path: /opt/hadoop/data/quality/dq_metrics
+
+monitoring:
+  dq_sla_threshold: 95
+  alert_webhook: "https://hooks.slack.com/services/your-webhook-url"
+  alert_email: "alerts@olist.com"
